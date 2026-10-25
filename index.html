@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expression Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="keys" aria-hidden="true">
+      <span class="key o-add">+</span>
+      <span class="key o-sub">-</span>
+      <span class="key o-mul">*</span>
+      <span class="key o-div">/</span>
+      <span class="key o-pow">^</span>
+      <span class="key o-mod">%</span>
+    </div>
+    <h1>Expression Converter and Evaluator</h1>
+    <p class="sub">Type an expression and watch it turn into infix, postfix and prefix. Step through the stack, change variable values, and read the expression tree. Every operator keeps its color wherever it appears.</p>
+  </header>
+
+  <section class="display" aria-label="Expression input">
+    <div class="row">
+      <div class="modes" id="modes" role="group" aria-label="Notation of the expression you type"></div>
+      <span class="modehint" id="modehint"></span>
+    </div>
+    <input id="expr" class="expr" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="msg" aria-label="Expression">
+    <p id="msg" class="msg" role="status"></p>
+    <div class="tape" id="tape" aria-label="Tokens"></div>
+    <div class="examples" id="examples"><span class="lbl">Try:</span></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel" id="p-notations" aria-label="Converted notations">
+      <div class="panel-head"><h2>Three notations</h2></div>
+      <div class="rows" id="notations"></div>
+      <p class="legend"><span class="op o-neg">~</span> means unary minus. Order of work: <span class="mono">^</span> first (right to left), then unary minus, then <span class="mono">* / %</span>, then <span class="mono">+ -</span>.</p>
+    </section>
+    <section class="panel" id="p-value" aria-label="Value">
+      <div class="panel-head"><h2>Value</h2></div>
+      <div class="resultlbl">Result</div>
+      <div class="value" id="value" aria-live="polite"></div>
+      <div class="vars" id="vars"></div>
+    </section>
+  </div>
+
+  <section class="panel" id="p-trace" aria-label="Step-by-step trace">
+    <div class="panel-head">
+      <h2>Watch the stack work</h2>
+      <div class="tabs" id="tabs" role="tablist"></div>
+    </div>
+    <div class="ctrl">
+      <button class="btn icon" id="b-reset" aria-label="Back to the first step" title="Reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      </button>
+      <button class="btn icon" id="b-back" aria-label="Previous step" title="Previous step">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="btn primary" id="b-play">
+        <svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+        <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16" rx="1.5"/><rect x="14" y="4" width="5" height="16" rx="1.5"/></svg>
+        <span id="play-label">Play</span>
+      </button>
+      <button class="btn icon" id="b-next" aria-label="Next step" title="Next step">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <input type="range" id="range" min="0" max="0" value="0" aria-label="Step">
+      <span class="count" id="count"></span>
+    </div>
+    <div id="trace-body"></div>
+  </section>
+
+  <section class="panel" id="p-tree" aria-label="Expression tree">
+    <div class="panel-head"><h2>Expression tree</h2></div>
+    <div class="treewrap" id="tree"></div>
+    <p class="cap">Read it left to right for infix (inorder), root first for prefix (preorder), or children before their parent for postfix (postorder).</p>
+  </section>
+
+  <p class="foot">Same algorithms as the C++ project: a linked-list stack, the shunting-yard method for infix to postfix, stack evaluation, and an expression tree behind every conversion.</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
